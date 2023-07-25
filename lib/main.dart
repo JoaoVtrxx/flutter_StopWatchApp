@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       color: Colors.blue,
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }

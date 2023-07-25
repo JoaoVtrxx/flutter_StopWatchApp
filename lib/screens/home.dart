@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch/models/lap_model.dart';
+import 'package:flutter_stopwatch/widgets/bottom_buttons.dart';
+import 'package:flutter_stopwatch/widgets/list_view_laps.dart';
+import 'package:flutter_stopwatch/widgets/stopwatch_digitos.dart';
 import '../lists/listlaps.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -19,14 +22,14 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isRunning = false;
   Timer? timer;
 
-  void _stopWatch() {
+  void stopWatch() {
     timer!.cancel();
     setState(() {
       isRunning = false;
     });
   }
 
-  void _startWatch() {
+  void startWatch() {
     isRunning = true;
     timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       int horasLocal = horas;
@@ -75,17 +78,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _startPause() {
+  void startPause() {
     setState(() {
       if (!isRunning) {
-        _startWatch();
+        startWatch();
       } else {
-        _stopWatch();
+        stopWatch();
       }
     });
   }
 
-  void _reset() {
+  void reset() {
     setState(() {
       horas = 0;
       minutos = 0;
@@ -99,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _lap() {
+  void lap() {
     setState(() {
       listlaps.add(LapModel(
           numVolta: "${listlaps.length + 1}",
@@ -110,101 +113,48 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void deleteItem(int index) {
+    setState(() {
+      listlaps.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFf84444),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFf84444),
+        backgroundColor: Color.fromARGB(255, 38, 122, 72),
         title: const Text("Cronômetro by João V."),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Text(
-                "$digitoHorasAtual : $digitoMinutosAtual : $digitoSegundosAtual.$digitoMiliSegundosAtual",
-                style: const TextStyle(fontSize: 45, color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: 400,
-              child: ListView.separated(
-                padding: const EdgeInsets.all(12),
-                itemCount: listlaps.length,
-                itemBuilder: (context, index) {
-                  LapModel lap = listlaps[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: ListTile(
-                      title: Text(
-                        "${lap.digitoHoras} : ${lap.digitoMinutos} : ${lap.digitoSegundos} : ${lap.digitoMiliSegundos}",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.justify,
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Color(0xFFf84444),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            listlaps.removeAt(index);
-                          });
-                        },
-                      ),
-                      leading: Text(
-                        "Volta ${index + 1}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 10);
-                },
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  color: Colors.white,
-                  iconSize: 50,
-                  onPressed: _reset,
-                  icon: const Icon(Icons.restore),
-                ),
-                IconButton(
-                  color: Colors.white,
-                  iconSize: 80,
-                  onPressed: _startPause,
-                  icon: (isRunning)
-                      ? const Icon(Icons.pause_circle_outlined)
-                      : const Icon(Icons.play_circle_outline),
-                ),
-                IconButton(
-                  color: Colors.white,
-                  iconSize: 50,
-                  onPressed: _lap,
-                  icon: const Icon(Icons.flag),
-                ),
-              ],
-            )
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/img_background.jpg"),
+              fit: BoxFit.cover),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              StopWatchDigitosWidget(
+                  digitoHorasAtual: digitoHorasAtual,
+                  digitoMinutosAtual: digitoMinutosAtual,
+                  digitoSegundosAtual: digitoSegundosAtual,
+                  digitoMiliSegundosAtual: digitoMiliSegundosAtual),
+              ListViewLaps(deleteItem: deleteItem),
+              BottomButtonsWidget(
+                  isRunning: isRunning,
+                  reset: reset,
+                  startPause: startPause,
+                  lap: lap),
+              SizedBox(
+                height: 80,
+              )
+            ],
+          ),
         ),
       ),
     );
