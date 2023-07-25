@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   reset: reset,
                   startPause: startPause,
                   lap: lap),
-              SizedBox(
+              const SizedBox(
                 height: 80,
               )
             ],
