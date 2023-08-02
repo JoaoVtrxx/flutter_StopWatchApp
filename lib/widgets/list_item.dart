@@ -15,7 +15,7 @@ class ListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Color.fromRGBO(255, 255, 255, 0.8),
+          color: const Color.fromRGBO(255, 255, 255, 0.8),
           borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         title: Text(

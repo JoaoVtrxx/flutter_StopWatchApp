@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 38, 122, 72),
+        backgroundColor: const Color.fromARGB(255, 38, 122, 72),
         title: const Text("Cronômetro by João V."),
         centerTitle: true,
       ),
@@ -139,17 +139,22 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              StopWatchDigitosWidget(
-                  digitoHorasAtual: digitoHorasAtual,
-                  digitoMinutosAtual: digitoMinutosAtual,
-                  digitoSegundosAtual: digitoSegundosAtual,
-                  digitoMiliSegundosAtual: digitoMiliSegundosAtual),
-              ListViewLaps(deleteItem: deleteItem),
-              BottomButtonsWidget(
-                  isRunning: isRunning,
-                  reset: reset,
-                  startPause: startPause,
-                  lap: lap),
+              Flexible(
+                flex: 2,
+                child: StopWatchDigitosWidget(
+                    digitoHorasAtual: digitoHorasAtual,
+                    digitoMinutosAtual: digitoMinutosAtual,
+                    digitoSegundosAtual: digitoSegundosAtual,
+                    digitoMiliSegundosAtual: digitoMiliSegundosAtual),
+              ),
+              Flexible(flex: 4, child: ListViewLaps(deleteItem: deleteItem)),
+              Flexible(
+                child: BottomButtonsWidget(
+                    isRunning: isRunning,
+                    reset: reset,
+                    startPause: startPause,
+                    lap: lap),
+              ),
               const SizedBox(
                 height: 80,
               )
